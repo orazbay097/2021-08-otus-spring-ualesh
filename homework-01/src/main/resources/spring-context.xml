@@ -11,4 +11,8 @@
         <constructor-arg name="questionDao" ref="questionDao"/>
     </bean>
 
+    <bean id="surveyPresenter" class="ru.otus.spring.presenter.SurveyPresenterImpl">
+        <constructor-arg name="surveyService" ref="surveyService"/>
+    </bean>
+
 </beans>
