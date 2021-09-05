@@ -1,5 +1,6 @@
 package ru.otus.spring.presenter;
 
+import ru.otus.spring.domain.Survey;
 import ru.otus.spring.service.SurveyService;
 
 import java.util.Scanner;
@@ -13,13 +14,14 @@ public class SurveyPresenterImpl implements  SurveyPresenter{
 
     @Override
     public void start() {
+        Survey survey = surveyService.createSurvey();
         Scanner scan = new Scanner(System.in);
 
-        while (!this.surveyService.isFinished()){
-            System.out.println(this.surveyService.getCurrentQuestionText());
-            this.surveyService.answerToCurrentQuestion(scan.nextLine());
+        while (!survey.isFinished()){
+            System.out.println(survey.getCurrentQuestionText());
+            survey.answerToCurrentQuestion(scan.nextLine());
         }
 
-        System.out.printf("Your score is: %d%n", this.surveyService.getScore());
+        System.out.printf("Your score is: %d%n", survey.getScore());
     }
 }

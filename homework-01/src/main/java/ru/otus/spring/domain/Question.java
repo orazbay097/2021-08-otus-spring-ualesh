@@ -1,8 +1,8 @@
 package ru.otus.spring.domain;
 
 public class Question {
-    private String questionText;
-    private  String answerText;
+    private final String questionText;
+    private final String answerText;
 
     public Question(String questionText, String answerText) {
         this.questionText = questionText;

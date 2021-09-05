@@ -3,11 +3,19 @@
        xmlns="http://www.springframework.org/schema/beans"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans.xsd">
-
-    <bean id="questionDao" class="ru.otus.spring.dao.QuestionDaoCSV">
+    <bean id="loader" class="ru.otus.spring.loader.LoaderResource">
     </bean>
 
-    <bean id="surveyService" class="ru.otus.spring.service.SurveyServiceImp">
+    <bean id="parser" class="ru.otus.spring.parser.QuestionParserCsv">
+    </bean>
+
+    <bean id="questionDao" class="ru.otus.spring.dao.QuestionDaoCSV">
+        <constructor-arg name="loader" ref="loader"/>
+        <constructor-arg name="parser" ref="parser"/>
+        <constructor-arg name="csvFileName" value="questions.csv"/>
+    </bean>
+
+    <bean id="surveyService" class="ru.otus.spring.service.SurveyServiceImpl">
         <constructor-arg name="questionDao" ref="questionDao"/>
     </bean>
 

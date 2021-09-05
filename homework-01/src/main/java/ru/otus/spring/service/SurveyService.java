@@ -1,11 +1,7 @@
 package ru.otus.spring.service;
 
-import ru.otus.spring.dao.NoMoreQuestionsException;
+import ru.otus.spring.domain.Survey;
 
 public interface SurveyService {
-
-    String getCurrentQuestionText() throws NoMoreQuestionsException;
-    void answerToCurrentQuestion(String answer) throws NoMoreQuestionsException;
-    int getScore();
-    boolean isFinished();
+    Survey createSurvey();
 }
