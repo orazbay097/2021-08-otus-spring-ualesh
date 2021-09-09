@@ -21,6 +21,7 @@ public class LoaderResource implements Loader {
             }
         } catch (Exception e) {
             System.out.println(e.getMessage());
+            throw new RuntimeException();
         }
         return stringBuilder.toString();
     }

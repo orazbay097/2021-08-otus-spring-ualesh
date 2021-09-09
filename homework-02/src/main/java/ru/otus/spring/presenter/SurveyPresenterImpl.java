@@ -30,8 +30,8 @@ public class SurveyPresenterImpl implements  SurveyPresenter{
 
 
         while (!survey.isFinished()){
-            System.out.println(survey.getCurrentQuestionText());
-            survey.answerToCurrentQuestion(scan.nextLine());
+            System.out.println(survey.getCurrentQuestion().getQuestionText());
+            surveyService.answerToCurrentSurveyQuestion(survey, scan.nextLine());
         }
 
         System.out.println(survey.getResult());

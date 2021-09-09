@@ -1,6 +1,7 @@
 package ru.otus.spring.dao;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 import ru.otus.spring.domain.Question;
 import ru.otus.spring.loader.Loader;
@@ -10,7 +11,7 @@ import ru.otus.spring.parser.QuestionParserCsv;
 
 import java.util.Queue;
 
-@Repository
+@Component
 public class QuestionDaoCSV implements QuestionDao {
 
 

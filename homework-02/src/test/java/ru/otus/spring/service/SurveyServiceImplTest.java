@@ -39,7 +39,7 @@ class SurveyServiceImpTest {
                         )
                 );
 
-        assertThat(this.surveyServiceImp.createSurvey(new Person("a","b")).getCurrentQuestionText())
+        assertThat(this.surveyServiceImp.createSurvey(new Person("a","b")).getCurrentQuestion().getQuestionText())
                 .isEqualTo("A");
     }
 }

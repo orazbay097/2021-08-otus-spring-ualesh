@@ -5,4 +5,5 @@ import ru.otus.spring.domain.Survey;
 
 public interface SurveyService {
     Survey createSurvey(Person author);
+    void answerToCurrentSurveyQuestion(Survey survey, String answer);
 }

@@ -1,6 +1,6 @@
 package ru.otus.spring.domain;
 
-import ru.otus.spring.dao.NoMoreQuestionsException;
+import ru.otus.spring.exceptions.NoMoreQuestionsException;
 
 import java.util.Queue;
 
@@ -16,24 +16,24 @@ public class Survey {
         this.minPassScore = minPassScore;
     }
 
-    public String getCurrentQuestionText() {
+    public Question getCurrentQuestion() {
         try {
-            return this.questions.peek().getQuestionText();
+            return this.questions.peek();
         } catch (NullPointerException e) {
             throw new NoMoreQuestionsException();
         }
     }
 
-    public void answerToCurrentQuestion(String answer) {
+    public void answerToCurrentQuestion(boolean isRightAnswer) {
         if (this.isFinished()) {
             throw new NoMoreQuestionsException();
         }
-
-        if (this.questions.peek().getAnswerText().equals(answer.toLowerCase())) {
+        if (isRightAnswer) {
             this.score++;
         }
         this.questions.remove();
     }
+
 
     public String getResult() {
         return String.format("Dear, %s %s, your score is %d.\nYou are %s.",
