@@ -17,7 +17,7 @@ import java.util.LinkedList;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
-class SurveyServiceImpTest {
+class SurveyServiceImplTest {
     @Mock
     private QuestionDao questionDao;
     @InjectMocks
