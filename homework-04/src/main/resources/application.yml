@@ -1,0 +1,8 @@
+spring:
+  messages:
+    basename: i18n/messages
+    fallback-to-system-locale: false
+survey:
+  base-csv-filename: questions
+  pass-score: 3
+  language-tag: ru-RU
