@@ -45,7 +45,7 @@ class BookRepositoryJdbcTest {
     @Test
     void shouldReturnBookById() {
         val book = this.repositoryJdbc.getById(FIRST_BOOK_ID);
-        assertThat(book).matches(
+        assertThat(book).isNotNull().matches(
                 (b -> b.getName().equals(FIRST_BOOK_NAME) &&
                         b.getAuthor().getId() == FIRST_BOOK_AUTHOR_ID), "not full first book"
         );
