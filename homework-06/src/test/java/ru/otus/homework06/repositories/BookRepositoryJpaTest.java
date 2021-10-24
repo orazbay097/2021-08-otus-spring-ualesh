@@ -109,7 +109,9 @@ class BookRepositoryJpaTest {
     @Test
     void shouldSetNameOfBook() {
         val newName = "new name";
-        this.repositoryJpa.setName(FIRST_BOOK_ID, newName);
+        val book = this.em.find(Book.class, FIRST_BOOK_ID);
+        book.setName(newName);
+        this.repositoryJpa.save(book);
         assertThat(this.em.find(Book.class, FIRST_BOOK_ID).getName()).isEqualTo(newName);
     }
 

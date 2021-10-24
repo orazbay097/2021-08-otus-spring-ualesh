@@ -19,7 +19,6 @@ public class CommentServiceImpl implements CommentService{
         return this.commentRepository.save(comment);
     }
 
-    @Transactional(readOnly = true)
     @Override
     public List<Comment> getAll() {
         return this.commentRepository.getAll();

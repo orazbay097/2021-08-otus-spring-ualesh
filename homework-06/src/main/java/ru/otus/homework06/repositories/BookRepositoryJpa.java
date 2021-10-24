@@ -3,10 +3,11 @@ package ru.otus.homework06.repositories;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 import org.hibernate.exception.ConstraintViolationException;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Component;
 import ru.otus.homework06.exceptions.NoSuchAuthorException;
 import ru.otus.homework06.exceptions.NoSuchBookException;
 import ru.otus.homework06.exceptions.NoSuchGenreException;
+import ru.otus.homework06.models.Author;
 import ru.otus.homework06.models.Book;
 import ru.otus.homework06.models.Comment;
 import ru.otus.homework06.models.Genre;
@@ -19,7 +20,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-@Repository
+@Component
 @RequiredArgsConstructor
 public class BookRepositoryJpa implements BookRepository {
     @PersistenceContext
@@ -62,27 +63,13 @@ public class BookRepositoryJpa implements BookRepository {
     }
 
     @Override
-    public void setName(long id, String name) {
-        Query query = em.createQuery("update Book b " +
-                "set b.name = :name " +
-                "where b.id = :id");
-        query.setParameter("name", name);
-        query.setParameter("id", id);
-        if (query.executeUpdate() == 0) throw new NoSuchBookException();
-    }
-
-    @Override
     public void setAuthor(long bookId, long authorId) {
-        try {
-            Query query = em.createQuery("update Book b " +
-                    "set b.author.id = :authorId " +
-                    "where b.id = :bookId");
-            query.setParameter("authorId", authorId);
-            query.setParameter("bookId", bookId);
-            if (query.executeUpdate() == 0) throw new NoSuchBookException();
-        } catch (PersistenceException ex) {
-            throw new NoSuchAuthorException(ex);
-        }
+        val optionalBook = this.getById(bookId);
+        if (optionalBook.isEmpty()) throw new NoSuchBookException();
+
+        val book = optionalBook.get();
+        book.setAuthor(new Author(authorId, null, null));
+        this.save(book);
     }
 
     @Override
@@ -125,10 +112,7 @@ public class BookRepositoryJpa implements BookRepository {
 
     @Override
     public void delete(long id) {
-        Query query = em.createQuery("delete " +
-                "from Book b " +
-                "where b.id = :id");
-        query.setParameter("id", id);
-        if (query.executeUpdate() == 0) throw new NoSuchBookException();
+        val book = this.getById(id).orElseThrow(NoSuchBookException::new);
+        em.remove(book);
     }
 }

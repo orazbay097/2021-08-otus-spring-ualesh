@@ -13,7 +13,6 @@ import java.util.List;
 public class GenreServiceImpl implements GenreService{
     private final GenreRepository genreRepository;
 
-    @Transactional(readOnly = true)
     @Override
     public List<Genre> getAllGenres() {
         return this.genreRepository.getAllGenres();

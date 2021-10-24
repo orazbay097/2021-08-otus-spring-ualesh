@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
+import org.springframework.transaction.annotation.Transactional;
 import ru.otus.homework06.exceptions.NoSuchAuthorException;
 import ru.otus.homework06.exceptions.NoSuchBookException;
 import ru.otus.homework06.exceptions.NoSuchCommentException;
@@ -34,6 +35,7 @@ public class LibraryCommands {
     private final static String MESSAGE_NO_SUCH_GENRE = "No such genre";
     private final static String MESSAGE_NO_SUCH_COMMENT = "No such comment";
 
+    @Transactional
     @ShellMethod(value = "Get all books", key = {"books"})
     public List<Book> getAllBooks() {
         return this.bookService.getAll();
@@ -57,7 +59,7 @@ public class LibraryCommands {
                             bookName,
                             new Author(authorId, null, null),
                             Arrays.stream(splitGenres(genreIds)).mapToObj(g -> new Genre(g, null))
-                            .collect(Collectors.toList()),null
+                                    .collect(Collectors.toList()), null
                     )
             ));
         } catch (NoSuchGenreException e) {
@@ -75,7 +77,7 @@ public class LibraryCommands {
         try {
             this.bookService.setName(bookId, bookName);
             return "Book name changed";
-        }catch (NoSuchBookException e){
+        } catch (NoSuchBookException e) {
             return MESSAGE_NO_SUCH_BOOK;
         }
     }
@@ -88,7 +90,7 @@ public class LibraryCommands {
         try {
             this.bookService.setAuthor(bookId, authorId);
             return "Book author changed";
-        }catch (NoSuchBookException e){
+        } catch (NoSuchBookException e) {
             return MESSAGE_NO_SUCH_BOOK;
         } catch (NoSuchAuthorException e) {
             return MESSAGE_NO_SUCH_AUTHOR;
@@ -103,11 +105,18 @@ public class LibraryCommands {
         try {
             this.bookService.setGenres(bookId, this.splitGenres(genreIds));
             return "Book genres changed";
-        }catch (NoSuchBookException e){
+        } catch (NoSuchBookException e) {
             return MESSAGE_NO_SUCH_BOOK;
         } catch (NoSuchGenreException e) {
             return MESSAGE_NO_SUCH_GENRE;
         }
+    }
+
+    @ShellMethod(value = "Get comments of books", key = {"book comments"})
+    public List<Comment> getCommentsOfBook(
+            @ShellOption({"book id"}) long bookId
+            ) {
+        return this.bookService.getCommentsByBook(bookId);
     }
 
     @ShellMethod(value = "Add comment to book", key = {"add book comment"})
@@ -118,7 +127,7 @@ public class LibraryCommands {
         try {
             this.bookService.addComment(bookId, commentText);
             return "Comment added to book";
-        }catch (NoSuchBookException e){
+        } catch (NoSuchBookException e) {
             return MESSAGE_NO_SUCH_BOOK;
         }
     }
@@ -130,7 +139,7 @@ public class LibraryCommands {
         try {
             this.bookService.clearComments(bookId);
             return "Comments of book cleared";
-        }catch (NoSuchBookException e){
+        } catch (NoSuchBookException e) {
             return MESSAGE_NO_SUCH_BOOK;
         }
     }
@@ -142,12 +151,13 @@ public class LibraryCommands {
         try {
             this.bookService.delete(bookId);
             return "Book deleted";
-        }catch (NoSuchBookException e){
+        } catch (NoSuchBookException e) {
             return MESSAGE_NO_SUCH_BOOK;
         } catch (NoSuchGenreException e) {
             return MESSAGE_NO_SUCH_GENRE;
         }
     }
+
     @ShellMethod(value = "Get all authors", key = {"authors"})
     public List<Author> getAllAuthors() {
         return this.authorService.getAllAuthors();
@@ -171,7 +181,7 @@ public class LibraryCommands {
         try {
             this.commentService.setText(commentId, commentText);
             return "Comment updated";
-        }catch (NoSuchCommentException ex){
+        } catch (NoSuchCommentException ex) {
             return MESSAGE_NO_SUCH_COMMENT;
         }
     }
@@ -183,12 +193,12 @@ public class LibraryCommands {
         try {
             this.commentService.delete(commentId);
             return "Comment deleted";
-        }catch (NoSuchCommentException ex){
+        } catch (NoSuchCommentException ex) {
             return MESSAGE_NO_SUCH_COMMENT;
         }
     }
 
-    private long [] splitGenres(String genres) {
+    private long[] splitGenres(String genres) {
         return Arrays.stream(genres.split(" ")).mapToLong(Long::parseLong).toArray();
     }
 

@@ -1,10 +1,12 @@
 package ru.otus.homework06.services;
 
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.otus.homework06.exceptions.NoSuchBookException;
 import ru.otus.homework06.models.Book;
+import ru.otus.homework06.models.Comment;
 import ru.otus.homework06.repositories.BookRepository;
 
 import java.util.List;
@@ -15,13 +17,11 @@ import java.util.Optional;
 public class BookServiceImpl implements BookService{
     private final BookRepository bookRepository;
 
-    @Transactional(readOnly = true)
     @Override
     public List<Book> getAll() {
         return this.bookRepository.getAll();
     }
 
-    @Transactional(readOnly = true)
     @Override
     public Optional<Book> getById(long id) {
         return this.bookRepository.getById(id);
@@ -36,7 +36,9 @@ public class BookServiceImpl implements BookService{
     @Transactional
     @Override
     public void setName(long id, String name) {
-        this.bookRepository.setName(id,name);
+        val optionalBook = this.bookRepository.getById(id);
+        val book = optionalBook.orElseThrow(NoSuchBookException::new);
+        this.bookRepository.save(book);
     }
 
     @Transactional
@@ -49,6 +51,11 @@ public class BookServiceImpl implements BookService{
     @Override
     public void setGenres(long id, long... genreIds) {
         this.bookRepository.setGenres(id, genreIds);
+    }
+
+    @Override
+    public List<Comment> getCommentsByBook(long bookId) {
+        return this.bookRepository.getById(bookId).get().getComments();
     }
 
     @Transactional

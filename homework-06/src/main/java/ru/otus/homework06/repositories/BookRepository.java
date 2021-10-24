@@ -12,7 +12,6 @@ public interface BookRepository {
     List<Book> getAll();
     Optional<Book> getById(long id);
     Book save(Book book) throws NoSuchAuthorException, NoSuchGenreException;
-    void setName (long id, String name) throws NoSuchBookException;
     void setAuthor (long bookId, long authorId) throws NoSuchBookException, NoSuchAuthorException;
     void setGenres (long id, long... genreIds) throws NoSuchBookException, NoSuchGenreException;
     void addComment (long id, String commentText) throws NoSuchBookException;

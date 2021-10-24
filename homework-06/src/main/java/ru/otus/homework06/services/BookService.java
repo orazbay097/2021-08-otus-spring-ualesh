@@ -1,21 +1,29 @@
 package ru.otus.homework06.services;
 
-import ru.otus.homework06.exceptions.NoSuchAuthorException;
-import ru.otus.homework06.exceptions.NoSuchBookException;
-import ru.otus.homework06.exceptions.NoSuchGenreException;
 import ru.otus.homework06.models.Book;
+import ru.otus.homework06.models.Comment;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface BookService {
     List<Book> getAll();
+
     Optional<Book> getById(long id);
-    Book save(Book book) throws NoSuchAuthorException, NoSuchGenreException;
-    void setName (long id, String name) throws NoSuchBookException;
-    void setAuthor (long bookId, long authorId) throws NoSuchBookException, NoSuchAuthorException;
-    void setGenres (long id, long... genreIds) throws NoSuchBookException, NoSuchGenreException;
-    void addComment (long id, String commentText) throws NoSuchBookException;
-    void clearComments (long id) throws NoSuchBookException;
-    void delete(long id) throws NoSuchBookException;
+
+    Book save(Book book);
+
+    void setName(long id, String name);
+
+    void setAuthor(long bookId, long authorId);
+
+    void setGenres(long id, long... genreIds);
+
+    List<Comment> getCommentsByBook(long bookId);
+
+    void addComment(long id, String commentText);
+
+    void clearComments(long id);
+
+    void delete(long id);
 }

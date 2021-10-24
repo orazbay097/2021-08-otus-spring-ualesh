@@ -1,14 +1,14 @@
 package ru.otus.homework06.repositories;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Component;
 import ru.otus.homework06.models.Genre;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.List;
 
-@Repository
+@Component
 @RequiredArgsConstructor
 public class GenreRepositoryJpa implements GenreRepository {
     @PersistenceContext

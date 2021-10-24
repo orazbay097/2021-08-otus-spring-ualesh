@@ -18,8 +18,7 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class BookServiceImplTest {
@@ -54,7 +53,7 @@ class BookServiceImplTest {
         given(this.bookRepository.getById(book.getId()))
                 .willReturn(Optional.of(book));
 
-        assertThat(this.bookService.getById(book.getId())).isEqualTo(book);
+        assertThat(this.bookService.getById(book.getId()).get()).isEqualTo(book);
     }
 
     @DisplayName("creates new book")
@@ -71,9 +70,9 @@ class BookServiceImplTest {
     @Test
     void setName() {
         val bookId = 1L;
-        val bookName = "name";
-        bookService.setName(bookId, bookName);
-        verify(bookRepository, times(1)).setName(bookId, bookName);
+        when(bookRepository.getById(bookId)).thenReturn(Optional.of(new Book()));
+        bookService.setName(bookId, "name");
+        verify(bookRepository, times(1)).getById(bookId);
     }
 
     @DisplayName("sets author")

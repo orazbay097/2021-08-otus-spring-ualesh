@@ -2,16 +2,16 @@ package ru.otus.homework06.repositories;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Component;
 import ru.otus.homework06.exceptions.NoSuchCommentException;
 import ru.otus.homework06.models.Comment;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import java.util.List;
+import java.util.Optional;
 
-@Repository
+@Component
 @RequiredArgsConstructor
 public class CommentRepositoryJpa implements CommentRepository{
     @PersistenceContext
@@ -34,21 +34,20 @@ public class CommentRepositoryJpa implements CommentRepository{
     }
 
     @Override
+    public Optional<Comment> getById(long id) {
+        return Optional.ofNullable(em.find(Comment.class, id));
+    }
+
+    @Override
     public void setText(long id, String text) {
-        Query query = em.createQuery("update Comment c " +
-                "set c.text = :text " +
-                "where c.id = :id");
-        query.setParameter("text", text);
-        query.setParameter("id", id);
-        if(query.executeUpdate()==0) throw new NoSuchCommentException();
+        val comment  = this.getById(id).orElseThrow(NoSuchCommentException::new);
+        comment.setText(text);
+        this.save(comment);
     }
 
     @Override
     public void delete(long id) {
-        Query query = em.createQuery("delete " +
-                "from Comment c " +
-                "where c.id = :id");
-        query.setParameter("id", id);
-        if(query.executeUpdate()==0) throw new NoSuchCommentException();
+        val comment  = this.getById(id).orElseThrow(NoSuchCommentException::new);
+        em.remove(comment);
     }
 }
