@@ -31,13 +31,11 @@ public class BookServiceImpl implements BookService {
         return this.bookRepository.findById(id).orElseThrow(NoSuchBookException::new);
     }
 
-    @Transactional
     @Override
     public Book save(Book book) {
         return this.bookRepository.save(book);
     }
 
-    @Transactional
     @Override
     public void setName(long id, String name) {
         val book = this.findById(id);
@@ -45,7 +43,6 @@ public class BookServiceImpl implements BookService {
         this.bookRepository.save(book);
     }
 
-    @Transactional
     @Override
     public void setAuthor(long bookId, long authorId) {
         val book = this.findById(bookId);
@@ -54,7 +51,6 @@ public class BookServiceImpl implements BookService {
         this.bookRepository.save(book);
     }
 
-    @Transactional
     @Override
     public void setGenres(long id, long... genreIds) {
         val book = this.findById(id);
@@ -84,7 +80,6 @@ public class BookServiceImpl implements BookService {
         this.bookRepository.save(book);
     }
 
-    @Transactional
     @Override
     public void delete(long id) {
         this.bookRepository.delete(this.findById(id));

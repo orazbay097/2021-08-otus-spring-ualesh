@@ -18,7 +18,6 @@ public class CommentServiceImpl implements CommentService {
         return this.commentRepository.findById(id).orElseThrow(NoSuchCommentException::new);
     }
 
-    @Transactional
     @Override
     public Comment save(Comment comment) {
         return this.commentRepository.save(comment);
@@ -29,7 +28,6 @@ public class CommentServiceImpl implements CommentService {
         return this.commentRepository.findAll();
     }
 
-    @Transactional
     @Override
     public void setText(long id, String text) {
         val comment = findById(id);
@@ -37,7 +35,6 @@ public class CommentServiceImpl implements CommentService {
         this.commentRepository.save(comment);
     }
 
-    @Transactional
     @Override
     public void delete(long id) {
         val comment = findById(id);
