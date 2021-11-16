@@ -5,8 +5,9 @@ import lombok.val;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.otus.homework08.exceptions.NoSuchBookException;
+import ru.otus.homework08.exceptions.NoSuchCommentException;
 import ru.otus.homework08.models.Book;
-import ru.otus.homework08.models.Comment;
+import ru.otus.homework08.models.BookComment;
 import ru.otus.homework08.models.Genre;
 import ru.otus.homework08.repositories.BookRepository;
 
@@ -20,7 +21,6 @@ public class BookServiceImpl implements BookService {
     private final BookRepository bookRepository;
     private final AuthorService authorService;
     private final GenreService genreService;
-    private final CommentService commentService;
 
     @Override
     public Iterable<Book> findAll() {
@@ -34,7 +34,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Book save(String bookName, String authorId, String... genreIds) {
-         return this.bookRepository.save(
+        return this.bookRepository.save(
                 new Book(
                         null,
                         bookName,
@@ -67,7 +67,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<Comment> getCommentsByBook(String bookId) {
+    public List<BookComment> getCommentsByBook(String bookId) {
         return this.findById(bookId).getComments();
     }
 
@@ -75,8 +75,30 @@ public class BookServiceImpl implements BookService {
     @Override
     public void addComment(String id, String commentText) throws NoSuchBookException {
         val book = this.findById(id);
-        book.getComments().add(commentService.save(new Comment(null, commentText)));
+        book.getComments().add(new BookComment(commentText));
         this.bookRepository.save(book);
+    }
+
+    @Override
+    public void setCommentText(String id, int commentIndex, String commentText) {
+        try {
+            val book = this.findById(id);
+            book.getComments().get(commentIndex).setText(commentText);
+            this.bookRepository.save(book);
+        } catch (IndexOutOfBoundsException ex) {
+            throw new NoSuchCommentException(ex);
+        }
+    }
+
+    @Override
+    public void deleteComment(String id, int commentIndex) {
+        try {
+            val book = this.findById(id);
+            book.getComments().remove(commentIndex);
+            this.bookRepository.save(book);
+        } catch (IndexOutOfBoundsException ex) {
+            throw new NoSuchCommentException(ex);
+        }
     }
 
     @Transactional
@@ -92,7 +114,7 @@ public class BookServiceImpl implements BookService {
         this.bookRepository.delete(this.findById(id));
     }
 
-    private List<Genre> collectGenres(String... genreIds){
+    private List<Genre> collectGenres(String... genreIds) {
         return Arrays.stream(genreIds).map(this.genreService::findById).collect(Collectors.toList());
     }
 }

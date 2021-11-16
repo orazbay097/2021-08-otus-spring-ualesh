@@ -1,7 +1,7 @@
 package ru.otus.homework08.services;
 
 import ru.otus.homework08.models.Book;
-import ru.otus.homework08.models.Comment;
+import ru.otus.homework08.models.BookComment;
 
 import java.util.List;
 
@@ -18,9 +18,13 @@ public interface BookService {
 
     void setGenres(String id, String... genreIds);
 
-    List<Comment> getCommentsByBook(String bookId);
+    List<BookComment> getCommentsByBook(String bookId);
 
     void addComment(String id, String commentText);
+
+    void setCommentText(String id, int commentIndex, String commentText);
+
+    void deleteComment(String id, int commentIndex);
 
     void clearComments(String id);
 

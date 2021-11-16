@@ -5,10 +5,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.transaction.annotation.Transactional;
 import ru.otus.homework08.models.Author;
 import ru.otus.homework08.models.Book;
-import ru.otus.homework08.models.Comment;
 import ru.otus.homework08.models.Genre;
 
 import java.util.List;
@@ -67,40 +65,4 @@ class BookRepositoryTest extends AbstractRepositoryTest {
         assertThat(this.mongoTemplate.findById(book.getId(), Book.class).getGenres().get(0)).isEqualTo(genre);
     }
 
-    @DisplayName("should delete comments of book when book deleted")
-    @Test
-    void shouldDeleteCommentsOfBookWhenDeleted(){
-        val comment = mongoTemplate.save(new Comment(null,"comment"));
-        val book = mongoTemplate.findAll(Book.class).get(0);
-        book.setComments(List.of(comment));
-        mongoTemplate.save(book);
-        repository.delete(book);
-        assertThat(mongoTemplate.findById(comment.getId(), Comment.class)).isNull();
-        //rollback
-        book.setId(null);
-        mongoTemplate.save(book);
-    }
-
-    @DisplayName("should delete comments of book when book comments cleared")
-    @Test
-    void shouldDeleteCommentsOfBookWhenCleared(){
-        val comment = mongoTemplate.save(new Comment(null,"comment"));
-        val book = mongoTemplate.findAll(Book.class).get(0);
-        book.setComments(List.of(comment));
-        mongoTemplate.save(book);
-        book.setComments(List.of());
-        repository.save(book);
-        assertThat(mongoTemplate.findById(comment.getId(), Comment.class)).isNull();
-    }
-
-    @DisplayName("should delete book comments by id")
-    @Test
-    void shouldDeleteCommentsOfBookById(){
-        val comment = mongoTemplate.save(new Comment(null,"some comment"));
-        val book = mongoTemplate.findAll(Book.class).get(0);
-        book.setComments(List.of(comment));
-        mongoTemplate.save(book);
-        repository.removeCommentById(comment.getId());
-        assertThat(mongoTemplate.findById(book.getId(), Book.class).getComments()).isEmpty();
-    }
 }

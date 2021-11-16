@@ -1,11 +1,7 @@
 package ru.otus.homework08.repositories;
 
-import org.springframework.data.repository.Repository;
+import org.springframework.data.repository.CrudRepository;
 import ru.otus.homework08.models.Author;
-import java.util.List;
-import java.util.Optional;
 
-public interface AuthorRepository extends Repository<Author, String> {
-    Optional<Author> findById(String id);
-    List<Author> findAll();
+public interface AuthorRepository extends CrudRepository<Author, String> {
 }

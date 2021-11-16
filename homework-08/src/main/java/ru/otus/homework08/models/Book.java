@@ -19,12 +19,12 @@ public class Book {
 
     private String name;
 
+    @DBRef
     private Author author;
 
     private List<Genre> genres;
 
-    @DBRef
-    private List<Comment> comments;
+    private List<BookComment> comments;
 
     @Override
     public String toString() {

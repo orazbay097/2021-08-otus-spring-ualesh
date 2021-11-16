@@ -11,16 +11,13 @@ import ru.otus.homework08.exceptions.NoSuchCommentException;
 import ru.otus.homework08.exceptions.NoSuchGenreException;
 import ru.otus.homework08.models.Author;
 import ru.otus.homework08.models.Book;
-import ru.otus.homework08.models.Comment;
+import ru.otus.homework08.models.BookComment;
 import ru.otus.homework08.models.Genre;
 import ru.otus.homework08.services.AuthorService;
 import ru.otus.homework08.services.BookService;
-import ru.otus.homework08.services.CommentService;
 import ru.otus.homework08.services.GenreService;
 
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @ShellComponent
@@ -28,7 +25,6 @@ public class LibraryCommands {
     private final BookService bookService;
     private final AuthorService authorService;
     private final GenreService genreService;
-    private final CommentService commentService;
 
     private final static String MESSAGE_NO_SUCH_BOOK = "No such book";
     private final static String MESSAGE_NO_SUCH_AUTHOR = "No such author";
@@ -110,7 +106,7 @@ public class LibraryCommands {
     }
 
     @ShellMethod(value = "Get comments of books", key = {"book comments"})
-    public List<Comment> getCommentsOfBook(
+    public List<BookComment> getCommentsOfBook(
             @ShellOption({"book id"}) String bookId
     ) {
         return this.bookService.getCommentsByBook(bookId);
@@ -156,8 +152,32 @@ public class LibraryCommands {
     }
 
     @ShellMethod(value = "Get all authors", key = {"authors"})
-    public List<Author> getAllAuthors() {
+    public Iterable<Author> getAllAuthors() {
         return this.authorService.getAllAuthors();
+    }
+
+    @ShellMethod(value = "Change author surname", key = {"change author surname"})
+    public String setAuthorSurname(
+            @ShellOption({"author id"}) String authorId,
+            @ShellOption({"surname"}) String surname) {
+        try {
+            this.authorService.setSurname(authorId, surname);
+            return "Author surname changed";
+        } catch (NoSuchAuthorException ex) {
+            return MESSAGE_NO_SUCH_AUTHOR;
+        }
+    }
+
+    @ShellMethod(value = "Change author name", key = {"change author name"})
+    public String setAuthorName(
+            @ShellOption({"author id"}) String authorId,
+            @ShellOption({"surname"}) String name) {
+        try {
+            this.authorService.setName(authorId, name);
+            return "Author name changed";
+        } catch (NoSuchAuthorException ex) {
+            return MESSAGE_NO_SUCH_AUTHOR;
+        }
     }
 
     @ShellMethod(value = "Get all genres", key = {"genres"})
@@ -165,31 +185,32 @@ public class LibraryCommands {
         return this.genreService.findAll();
     }
 
-    @ShellMethod(value = "Get all comments", key = {"comments"})
-    public Iterable<Comment> getAllComments() {
-        return this.commentService.getAll();
-    }
-
-    @ShellMethod(value = "Set comment text", key = {"update comment"})
+    @ShellMethod(value = "Set book comment text", key = {"update book comment"})
     public String setCommentText(
-            @ShellOption({"comment id"}) String commentId,
+            @ShellOption({"book id"}) String bookId,
+            @ShellOption({"comment index"}) int commentIndex,
             @ShellOption({"new comment text"}) String commentText
     ) {
         try {
-            this.commentService.setText(commentId, commentText);
+            this.bookService.setCommentText(bookId, commentIndex, commentText);
             return "Comment updated";
+        } catch (NoSuchBookException ex) {
+            return MESSAGE_NO_SUCH_BOOK;
         } catch (NoSuchCommentException ex) {
             return MESSAGE_NO_SUCH_COMMENT;
         }
     }
 
-    @ShellMethod(value = "Delete comment", key = {"delete comment"})
+    @ShellMethod(value = "Delete book comment", key = {"delete book comment"})
     public String deleteComment(
-            @ShellOption({"comment id"}) String commentId
+            @ShellOption({"book id"}) String bookId,
+            @ShellOption({"comment index"}) int commentIndex
     ) {
         try {
-            this.commentService.delete(commentId);
+            this.bookService.deleteComment(bookId, commentIndex);
             return "Comment deleted";
+        } catch (NoSuchBookException ex) {
+            return MESSAGE_NO_SUCH_BOOK;
         } catch (NoSuchCommentException ex) {
             return MESSAGE_NO_SUCH_COMMENT;
         }

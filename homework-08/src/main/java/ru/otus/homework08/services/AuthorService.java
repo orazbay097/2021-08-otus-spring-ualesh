@@ -2,9 +2,9 @@ package ru.otus.homework08.services;
 
 import ru.otus.homework08.models.Author;
 
-import java.util.List;
-
 public interface AuthorService {
     Author findById(String id);
-    List<Author> getAllAuthors();
+    Iterable<Author> getAllAuthors();
+    void setSurname(String id, String surname);
+    void setName(String id, String name);
 }
