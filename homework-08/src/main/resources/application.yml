@@ -1,0 +1,11 @@
+spring:
+  data:
+    mongodb:
+      uri: mongodb://localhost
+      port: 27017
+      database: awesomeMongo
+mongock:
+  runner-type: initializingbean
+logging:
+  level:
+    ROOT: ERROR
