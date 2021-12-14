@@ -1,0 +1,43 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: layout('books', ~{::title}, ~{::form})}">
+
+<title>Books form</title>
+<form id="edit-form" th:method="post" th:action="@{/books/save}" action="book_form.html" th:object="${book}">
+    <h1>Person Info:</h1>
+
+    <div class="field">
+        <label for="id-input">ID:</label>
+        <input class="field__input" th:value="*{id}" id="id-input" name="id" type="text" readonly="readonly" value="1"/
+        >
+    </div>
+
+    <div class="field">
+        <label for="name-input">Name:</label>
+        <input required class="field__input" th:value="*{name}" id="name-input" name="name" type="text"
+               value="John Doe"/>
+    </div>
+
+    <div class="field">
+        <label for="author-input">Author:</label>
+        <select required class="field__input" th:field="*{author.id}" id="author-input">
+            <option th:each="author : ${authors}" th:value="${author.id}" value="1"
+                    th:text="${author.surname+' '+author.name}">
+                Some author
+            </option>
+        </select>
+    </div>
+
+    <div class="field">
+        <label for="genre-input">Genres:</label>
+        <select required class="field__input" multiple th:field="*{genreIds}" id="genre-input">
+            <option th:each="genre : ${genres}" th:field="*{genreIds}" th:value="${genre.id}" value="1"
+                    th:text="${genre.name}">
+                Some genre
+            </option>
+        </select>
+    </div>
+
+    <div class="row">
+        <button class="btn" type="submit">Save</button>
+    </div>
+</form>
+</html>

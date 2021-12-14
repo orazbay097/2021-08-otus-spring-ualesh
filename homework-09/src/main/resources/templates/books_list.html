@@ -1,0 +1,52 @@
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: layout('books', ~{::title}, ~{::section})}">
+
+<title>Books list</title>
+<section>
+    <a class="btn-inline" th:href="@{/books/form}" href="book_form.html">Add new book</a>
+    <table class="table" style="margin-top: 2rem;">
+        <thead>
+        <tr>
+            <th>
+                Id
+            </th>
+            <th>
+                Name
+            </th>
+            <th>
+                Author
+            </th>
+            <th>
+                Genres
+            </th>
+            <th>
+
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="book: ${books}" th:object="${book}">
+            <td th:text="*{id}">
+                1
+            </td>
+            <td th:text="*{name}">
+                Some book name
+            </td>
+            <td th:text="*{author.surname+' '+author.name}">
+                Some book author
+            </td>
+            <td>
+                <span th:each="genre: *{genres}" th:text="${genre.name}">
+                    Some book genres
+                </span>
+            </td>
+            <td>
+                <a class="btn-inline" th:href="@{/books/form(id=*{id})}" href="book_form.html">Edit</a>
+                <form id="edit-form" th:method="post" th:action="@{/books/delete(id=*{id})}" action="#">
+                        <button class="btn-inline" type="submit">Delete</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</section>
+</html>

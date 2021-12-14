@@ -1,0 +1,28 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: layout('genres', ~{::title}, ~{::section})}">
+
+<title>Genres list</title>
+<section>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>
+                Id
+            </th>
+            <th>
+                Name
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="genre: ${genres}" th:object="${genre}">
+            <td th:text="*{id}">
+                1
+            </td>
+            <td th:text="*{name}">
+                Genre name
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</section>
+</html>
