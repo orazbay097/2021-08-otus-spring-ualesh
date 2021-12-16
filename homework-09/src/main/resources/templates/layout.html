@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html th:fragment="layout (module, title, content)" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600" rel="stylesheet">
+
+    <link rel="stylesheet" th:href="@{/style.css}" href="../static/style.css">
+    <title th:replace="${title}">Layout Title</title>
+</head>
+<body>
+<div class="container">
+    <header class="header">
+        <h2 class="header__text">Library</h2>
+        <nav class="app-nav">
+            <ul class="app-nav__list">
+                <li class="app-nav__item">
+                    <a class="app-nav__link" th:class="'app-nav\_\_link '+${module=='books'?'app-nav\_\_link_active':''}"
+                       th:href="@{/books}" href="books_list.html">Books</a>
+                </li>
+                <li class="app-nav__item">
+                    <a class="app-nav__link" th:class="'app-nav\_\_link '+${module=='authors'?'app-nav\_\_link_active':''}" th:href="@{/authors}" href="authors_list.html">Authors</a>
+                </li>
+                <li class="app-nav__item">
+                    <a class="app-nav__link" th:class="'app-nav\_\_link '+${module=='genres'?'app-nav\_\_link_active':''}" th:href="@{/genres}" href="genres_list.html">Genres</a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+    <main class="content" th:insert="${content}">
+        <p>Layout content</p>
+    </main>
+    <footer class="footer">
+        &copy; 2021 by Ualesh Orazbay. All rights reserved.
+    </footer>
+</div>
+</body>
+</html>
